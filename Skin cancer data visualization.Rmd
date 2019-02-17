@@ -1,0 +1,72 @@
+---
+title: "skin cancer"
+output: html_document
+---
+
+
+```{r load-data}
+library(tibble)
+library(ggplot2)
+library(magrittr)
+library(dplyr) 
+ham <- read.csv("HAM10000_metadata.csv")
+hamframe <- as_data_frame(ham)
+```
+
+
+```{r change-disease-name}
+hamframe <- hamframe %>%
+  mutate (
+    dx = case_when (
+      dx == "akiec" ~ "Arctinic Keratoses",
+      dx == "bcc" ~ "Basal cell carcinoma",
+      dx == "bkl" ~ "Benign keratosis",
+      dx == "df" ~ "Dermatofibroma",
+      dx == "mel" ~ "Melanoma",
+      dx == "nv" ~ "Melanocytic nevi",
+      dx == "vasc" ~ "Vascular skin lesion",
+      )
+    )
+```
+
+```{r localization-type-count}
+hamframe %>%
+ggplot(mapping = aes(x = localization, fill = dx)) + geom_bar() +
+  labs(title = "Count of Each Disease by Localizaation", x = "Localization", y = "Count", fill = "Type of Disease") +
+  coord_flip()
+```
+```{r localization-type-proportion}
+hamframe %>%
+ggplot(mapping = aes(x = localization, fill = dx)) + geom_bar(position = "fill") +
+  labs(title = "Proportion of Each Disease by Localizaation", x = "Localization", y = "Proportion", fill = "Type of Disease") +
+  coord_flip()
+```
+
+
+```{r age-type-count}
+hamframe %>%
+   
+ggplot(mapping = aes(x = age, fill = dx)) + geom_bar() +
+  labs(title = "Count of Each Disease by Age Group", x = "Age", y = "Count", fill ="Type of disease")
+```
+```{r age-type-proportion}
+hamframe %>%
+ggplot(mapping = aes(x = age, fill = dx)) + geom_bar(position = "fill") +
+  labs(title = "Proportion of Each Disease by Age Group", x = "Age", y = "Proportion", fill = "Type of disease") +
+  coord_flip()
+```
+```{r gender-type-count}
+hamframe %>%
+ggplot(mapping = aes(x = sex, fill = dx)) + geom_bar() +
+  labs(title = "Count of Each Disease by Gender", x = "Gender", y = "Count", fill = "Type of disease")
+
+```
+```{r gender-type-proportion}
+hamframe %>%
+ggplot(mapping = aes(x = sex, fill = dx)) + geom_bar(position = "fill") +
+  labs(title = "Proportion of Each Disease by Gender", x = "Gender", y = "Proportion", fill = "Type of disease") +
+  coord_flip()
+  
+```
+
+
